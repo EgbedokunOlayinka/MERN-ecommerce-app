@@ -1,36 +1,23 @@
 const express = require("express");
 const router = express.Router();
-const asyncHandler = require("express-async-handler");
+const {
+  getProducts,
+  getProductById,
+  deleteProduct,
+  createProduct,
+  updateProduct,
+  addReview,
+  getTopProducts,
+} = require("../controllers/productController");
+const { protect, admin } = require("../middleware/authMiddleware");
 
-const Product = require("../models/productModel");
-
-//  @desc Fetch all products
-//  @route GET /api/products
-//  @access Public
-router.get(
-  "/",
-  asyncHandler(async (req, res) => {
-    const products = await Product.find({});
-
-    res.json(products);
-  })
-);
-
-//  @desc Fetch single product
-//  @route GET /api/product/:id
-//  @access Public
-router.get(
-  "/:id",
-  asyncHandler(async (req, res) => {
-    const product = await Product.findById(req.params.id);
-
-    if (!product) {
-      res.status(404);
-      throw new Error("Product not found");
-    }
-
-    res.json(product);
-  })
-);
+router.route("/").get(getProducts).post(protect, admin, createProduct);
+router.route("/top").get(getTopProducts);
+router
+  .route("/:id")
+  .get(getProductById)
+  .delete(protect, admin, deleteProduct)
+  .put(protect, admin, updateProduct);
+router.route("/:id/reviews").post(protect, addReview);
 
 module.exports = router;
