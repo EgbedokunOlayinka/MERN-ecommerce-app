@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require('cors');
 const path = require("path");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
@@ -17,6 +18,7 @@ const app = express();
 // initialize middleware
 app.use(express.json({ extended: false }));
 app.use(express.urlencoded({ extended: false }));
+app.cors();
 
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
