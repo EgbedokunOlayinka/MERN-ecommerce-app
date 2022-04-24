@@ -18,7 +18,7 @@ const app = express();
 // initialize middleware
 app.use(express.json({ extended: false }));
 app.use(express.urlencoded({ extended: false }));
-app.cors();
+app.use(cors());
 
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
